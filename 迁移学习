@@ -11,7 +11,9 @@ train_set = CIFAR10('./data', train=True, transform=im_aug)
 
 for x in dataset：
   x = im_aug(x)
-  
+
+
+
 #迁移学习
 from __future__ import print_function, division
 
@@ -48,7 +50,7 @@ train_data = torchvision.datasets.MNIST(
 )
 
 print(train_data)
-test_data = torchvision.datasets.MNIST(root='./mnist/', train=False)
+test_data = torchvision.datasets.MNIST(root='./mnist/', train=False) # 测试集
 
 train_loader = Data.DataLoader(dataset=train_data, batch_size=BATCH_SIZE, shuffle=True)
 
@@ -245,11 +247,12 @@ def visualize_model(model, num_images=6):
                     model.train(mode=was_training)
                     return
         model.train(mode=was_training)
+        
 #finetune
-model_ft = models.resnet18(pretrained=True)
-print(model_ft)
-num_ftrs = model_ft.fc.in_features
-model_ft.fc = nn.Linear(num_ftrs, 2)
+model_ft = models.resnet18(pretrained=True) #加载模型
+print(model_ft) #模型可视化
+num_ftrs = model_ft.fc.in_features #模型参数
+model_ft.fc = nn.Linear(num_ftrs, 2) # 定位模型全连接层，fc1，fc2
 print(model_ft)
 model_ft = model_ft.to(device)
 
@@ -265,7 +268,7 @@ model_ft = train_model(model_ft, criterion, optimizer_ft, exp_lr_scheduler,
 #冻结除最后一层之外的所有网络
 model_conv = torchvision.models.resnet18(pretrained=True)
 for param in model_conv.parameters():
-    param.requires_grad = False
+    param.requires_grad = False #修改的层自动可训练
 
 num_ftrs = model_conv.fc.in_features
 model_conv.fc = nn.Linear(num_ftrs, 2)
@@ -283,7 +286,7 @@ model_conv = train_model(model_conv, criterion, optimizer_conv,
                          
 model_conv = torchvision.models.resnet18(pretrained=True)
 model = torch.nn.Sequential(
-    model_conv,
+    model_conv, #增加层
     torch.nn.Linear(1000, 2)
 )
 print(model)
