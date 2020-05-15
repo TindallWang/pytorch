@@ -67,7 +67,7 @@ from torch.autograd import Variable
 
 tensor = torch.FloatTensor([[1,2],[3,4]])
 
-variable = Variable(tensor, requires_grad=True)
+variable = Variable(tensor, requires_grad=True) #变量为Tensor的容器
 
 print(tensor)
 
@@ -130,7 +130,7 @@ class torch.nn.Conv1d(in_channels, out_channels, kernel_size,
 dilation: 用于控制内核点之间的距离
 空洞卷积
 groups: 控制输入和输出之间的连接
-28*28*2 3*3*64 26*26*64   2*3*3*64
+28*28*2 3*3*64 26*26*64   2*3*3*64 #1分为二
 28*28*1 3*3*32 26*26*32   1*3*3*32
 28*28*1 3*3*32 26*26*32   1*3*3*32
 torch.nn.functional.conv1d(input, weight, bias=None, 
@@ -468,7 +468,7 @@ for epoch in range(EPOCH):
         optimizer.step()              # apply gradients
 
     test_output = cnn(test_x)
-    pred_y = torch.max(test_output, 1)[1].data.numpy()
+    pred_y = torch.max(test_output, 1)[1].data.numpy() # 在cpu中
     accuracy = float((pred_y == test_y.data.numpy()).astype(int).sum()) / float(test_y.size(0))
     print('Epoch: ', epoch, '| train loss: %.4f' % loss.data.numpy(), '| test accuracy: %.2f' % accuracy)
     
@@ -490,6 +490,6 @@ for epoch in range(EPOCH):
         optimizer.step()              # apply gradients
 
     test_output = cnn(test_x)
-    pred_y = torch.max(test_output, 1)[1].cuda().data
+    pred_y = torch.max(test_output, 1)[1].cuda().data  #在GPU中
     accuracy = torch.sum(pred_y == test_y).cuda().type(torch.FloatTensor) / test_y.size(0)
     print('Epoch: ', epoch, '| train loss: %.4f' % loss.data, '| test accuracy: %.2f' % accuracy)
